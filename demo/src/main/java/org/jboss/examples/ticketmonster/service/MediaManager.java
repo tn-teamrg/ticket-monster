@@ -1,5 +1,7 @@
 package org.jboss.examples.ticketmonster.service;
 
+import io.github.pixee.security.HostValidator;
+import io.github.pixee.security.Urls;
 import static org.jboss.examples.ticketmonster.model.MediaType.IMAGE;
 
 import java.io.BufferedInputStream;
@@ -121,7 +123,7 @@ public class MediaManager {
     private boolean checkResourceAvailable(MediaItem mediaItem) {
         URL url = null;
         try {
-            url = new URL(mediaItem.getUrl());
+            url = Urls.create(mediaItem.getUrl(), Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS);
         } catch (MalformedURLException e) {
         }
 
@@ -170,7 +172,7 @@ public class MediaManager {
         if (!alreadyCached(cachedFileName)) {
             URL _url = null;
             try {
-                _url = new URL(url);
+                _url = Urls.create(url, Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS);
             } catch (MalformedURLException e) {
                 throw new IllegalStateException("Error reading URL " + url);
             }
